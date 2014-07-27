@@ -6,7 +6,9 @@ import (
 )
 
 func init() {
-	beego.RESTRouter("/object", &controllers.ObjectController{})
+	beego.Router("/", &controllers.MainController{})
 	beego.Router("/cmd", &controllers.CMDController{})
 	beego.Router("/cmd/:name", &controllers.CMDController{})
+
+	beego.RESTRouter("/object", &controllers.ObjectController{})
 }
