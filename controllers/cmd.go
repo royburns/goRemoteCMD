@@ -1,52 +1,37 @@
 package controllers
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
-	// "github.com/royburns/goRemoteCMD/models"
+	"github.com/royburns/goRemoteCMD/models"
 )
 
 type CMDController struct {
 	beego.Controller
 }
 
-// command: this.lineBuffer,
-// dir: this.env.dir,
-// user: this.env.userid,
-// pass: this.env.password
-type cmd struct {
-	command string
-	dir     string
-	user    string
-	pass    string
-}
-
 func (this *CMDController) Post() {
 	// var ob models.Object
 
-	//
-	fmt.Println(this.Ctx.Input.GetData("command"))
-	fmt.Println(this.Ctx.Input.IsAjax())
-	fmt.Println(this.Ctx.Input.IsPost())
-	fmt.Println(this.Ctx.Input.Method())
-	fmt.Println(this.Ctx.Input.Param("command"))
-	fmt.Println(this.Ctx.Input.Query("command"))
+	var cmd models.Cmd
 
-	var ob cmd
-	fmt.Println(string(this.Ctx.Input.RequestBody))
-	json.Unmarshal(this.Ctx.Input.RequestBody, &ob)
-	fmt.Println(ob)
+	cmd.Command = this.Ctx.Input.Query("command")
+	cmd.Params = this.Ctx.Input.Query("command")
+	if cmd.Command != "" {
+		res, e := models.Run(cmd.Command, "")
+		if e != nil {
+			fmt.Println("\n" + e.Error())
+		}
+		// value, _ := json.Marshal(res)
+		this.Data["json"] = res
+	} else {
+		// obs := models.GetAll()
+		// this.Data["json"] = obs
+		fmt.Println("The command is not exists.")
+		this.Data["json"] = "The command is not exists."
+	}
 
-	ob.command = this.Ctx.Input.Query("command")
-	ob.dir = "C:\\"
-	ob.user = "royburns"
-	ob.pass = "123123"
-	fmt.Println(ob)
-
-	// objectid := models.AddOne(ob)
-	// this.Data["json"] = map[string]string{"ObjectId": objectid}
-	this.Data["json"] = ob
 	this.ServeJson()
 }
 
@@ -72,6 +57,22 @@ func (this *CMDController) Get() {
 	// 	fmt.Println("The command is not exists.")
 	// 	this.Data["json"] = "The command is not exists."
 	// }
+	// this.ServeJson()
+
+	// var ob cmd
+	// // fmt.Println(string(this.Ctx.Input.RequestBody))
+	// // json.Unmarshal(this.Ctx.Input.RequestBody, &ob)
+	// // fmt.Println(ob)
+
+	// ob.command = "test"
+	// ob.dir = "C:\\"
+	// ob.user = "royburns"
+	// ob.pass = "123123"
+	// fmt.Println(ob)
+
+	// // objectid := models.AddOne(ob)
+	// // this.Data["json"] = map[string]string{"ObjectId": objectid}
+	// this.Data["json"] = ob
 	// this.ServeJson()
 
 	fmt.Println("Get")

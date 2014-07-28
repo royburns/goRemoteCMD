@@ -14,17 +14,22 @@ var (
 	Cmds map[string]*Cmd
 )
 
-type Result struct {
-	// Cmd
-	Name    string
+// command: this.lineBuffer,
+// dir: this.env.dir,
+// user: this.env.userid,
+// pass: this.env.password
+type Cmd struct {
+	Command string
 	Params  string
-	Success bool
-	Info    string
+	// User    string
+	// Pass    string
 }
 
-type Cmd struct {
-	Name   string
-	Params string
+type Result struct {
+	Command string
+	Params  string
+	Success bool
+	Result  string
 }
 
 func init() {
@@ -33,7 +38,7 @@ func init() {
 	Cmds["ping"] = &Cmd{"ping", "someone"}
 }
 
-func Run(Name string, Params string) (res *Result, err error) {
+func Run(Command string, Params string) (res *Result, err error) {
 
 	// // cmd := exec.Command("cmd.exe ", Name)
 	// cmd := exec.Command(Name, Params)
@@ -60,18 +65,18 @@ func Run(Name string, Params string) (res *Result, err error) {
 	// fmt.Println("Run done!")
 
 	res = new(Result)
-	res.Name = Name
+	res.Command = Command
 	res.Params = Params
-	out, err := exec.Command(Name).Output()
+	out, err := exec.Command(Command).Output()
 
 	if err != nil {
 		fmt.Printf(err.Error())
 		res.Success = false
-		res.Info = "Error: " + err.Error()
+		res.Result = "Error: " + err.Error()
 	} else {
 		fmt.Printf("The date is :\n%s\n", out)
 		res.Success = true
-		res.Info = string(out)
+		res.Result = string(out)
 	}
 
 	return res, errors.New("no error")

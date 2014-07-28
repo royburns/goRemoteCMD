@@ -2,10 +2,12 @@
 	<head>
 		<title>termlib Remote Terminal</title>
 		<script language="JavaScript" type="text/javascript" src="static/js/termlib.js"></script>
+		<script language="JavaScript" type="text/javascript" src="static/js/jquery-1.11.1.min.js"></script>
 
 		<script type="text/javascript">
 		<!--
 
+		// use strict;
 		// path to server script goes here
 		var remotePath = '/cmd';
 
@@ -174,12 +176,39 @@
 									data: {
 										command: this.lineBuffer,
 										dir: this.env.dir,
-										user: this.env.userid,
-										pass: this.env.password
+										// user: this.env.userid,
+										// pass: this.env.password,
 									}
 								}
 							);
 							// leave without prompt (this will come from the callback)
+
+							// jQuery.ajax
+							// $.ajax({
+							// 	url: remotePath,
+							// 	type: 'POST',
+							// 	dataType: 'json',
+							// 	data: {
+							// 		command: this.lineBuffer,
+							// 		dir: this.env.dir,
+							// 		user: this.env.userid,
+							// 		pass: this.env.password
+							// 	},
+							// 	success: function(data) {
+							// 		console.log(data);
+							// 	},
+							// 	// success: socketCallback,
+							// })
+							// .done(function() {
+							// 	console.log("success");
+							// })
+							// .fail(function() {
+							// 	console.log("error");
+							// })
+							// .always(function() {
+							// 	console.log("complete");
+							// });
+							
 							return;
 						}
 					}
@@ -194,6 +223,7 @@
 			var response = this.socket;
 			if (response.success) {
 				// split the responseText to lines
+				// console.log(response.responseText);
 				var lines = response.responseText.split('\n');
 				// get the last valid line and check it
 				if (lines.length > 1 && lines[lines.length-1] == '') lines.length--;
